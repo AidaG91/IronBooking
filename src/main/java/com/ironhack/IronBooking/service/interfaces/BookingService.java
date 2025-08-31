@@ -1,8 +1,15 @@
 package com.ironhack.IronBooking.service.interfaces;
 
-import com.ironhack.IronBooking.model.Booking;
+import com.ironhack.IronBooking.dto.BookingRequestDTO;
+import com.ironhack.IronBooking.dto.BookingResponseDTO;
+
+import java.util.List;
 
 public interface BookingService {
-    Booking createBooking(Booking booking);
-    Booking getBookingById(Long id);
+    BookingResponseDTO getBookingById(Long id);
+    BookingResponseDTO createBooking(BookingRequestDTO requestDTO);
+    List<BookingResponseDTO> getAllBookings();
+    BookingResponseDTO updateBooking(Long id, BookingRequestDTO requestDTO);
+
+    void deleteBooking(Long id);
 }
