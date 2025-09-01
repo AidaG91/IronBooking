@@ -35,8 +35,14 @@ public class BookingController {
         return  bookingService.getAllBookings();
     }
 
+    //Update a booking
+    @PutMapping("/{id}")
+    public BookingResponseDTO updateBooking(@PathVariable Long id, @RequestBody BookingRequestDTO requestDTO) {
+        return  bookingService.updateBooking(id, requestDTO);
+    }
+
     // Delete a booking by ID
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void deleteBooking(@PathVariable Long id){
         bookingService.deleteBooking(id);
     }

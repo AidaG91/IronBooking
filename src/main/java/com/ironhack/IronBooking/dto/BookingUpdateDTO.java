@@ -14,18 +14,24 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingRequestDTO {
+public class BookingUpdateDTO {
+
+    @NotNull(message = "id is required")
+    private Long id;
 
     @NotNull(message = "startDate is required")
-    @FutureOrPresent(message = "startDate must be today or in the future")
+    @FutureOrPresent(message = "startDate most be today or in the future")
     private LocalDate startDate;
 
     @NotNull(message = "endDate is required")
-    @FutureOrPresent(message = "startDate must be today or in the future")
+    @FutureOrPresent(message = "endDate most be today or in the future")
     private LocalDate endDate;
 
+    @NotNull(message = "Status is required")
+    private BookingStatus status;
+
     @Min(value = 1, message = "numberOfGuests must be at least 1")
-    @Max(value = 20, message = "numberOfGuests must be at most 20")
+    @Max(value = 20, message = "numberOfGuests must be at least 20")
     private int numberOfGuests;
 
     @NotNull(message = "placeId is required")
