@@ -16,7 +16,14 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
-    ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PlaceRepository placeRepository;
+
 
     @Override
     public List<ReviewResponseDTO> getAllReviews() {
@@ -30,29 +37,37 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponseDTO getReviewById(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found. ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Review not found with id: " + id));
         return mapToResponseDTO(review);
     }
 
+
     @Override
     public ReviewResponseDTO createReview(ReviewRequestDTO reviewRequest) {
+        User user = userRepository.findById(reviewRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + reviewRequest.getUserId()));
+
+        Place place = placeRepository.findById(reviewRequest.getPlaceId())
+                .orElseThrow(() -> new RuntimeException("Place not found with id: " + reviewRequest.getPlaceId()));
+
         Review review = new Review();
-        review.setUser(reviewRequest.getUser());
+        review.setUser(user);
+        review.setPlace(place);
         review.setRating(reviewRequest.getRating());
         review.setComment(reviewRequest.getComment());
-        review.setDate(reviewRequest.setDate());
 
-        Review savedReview=reviewRepository.save(review);
-        return mapToResponseDTO(reviewRepository.save(savedReview));
+        Review savedReview = reviewRepository.save(review);
+        return mapToResponseDTO(savedReview);
     }
+
 
     @Override
     public ReviewResponseDTO updateReview(Long id, ReviewUpdateDTO reviewUpdate) {
-        Review review =reviewRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Review not found with id: " +id));
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found with id: " + id));
 
-        if (reviewUpdate.getRating() !=null) review.setRating(reviewUpdate.getRating());
-        if (reviewUpdate.getComment()!=null) review.setComment(reviewUpdate.getComment());
+        if (reviewUpdate.getRating() != null) review.setRating(reviewUpdate.getRating());
+        if (reviewUpdate.getComment() != null) review.setComment(reviewUpdate.getComment());
         Review updatedReview = reviewRepository.save(review);
         return mapToResponseDTO(updatedReview);
 
@@ -61,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(Long id) {
-        if(!reviewRepository.existsById(id)) {
+        if (!reviewRepository.existsById(id)) {
             throw new RuntimeException("Review not found with id: " + id);
         }
         reviewRepository.deleteById(id);
@@ -77,13 +92,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
-    //metodo auxiliar
-    private ReviewResponseDTO mapToResponseDTO(Review review){
-        ReviewResponseDTO dto=new ReviewResponseDTO();
+    // Auxiliary method
+    private ReviewResponseDTO mapToResponseDTO(Review review) {
+        ReviewResponseDTO dto = new ReviewResponseDTO();
         dto.setId(review.getId());
-        dto.setUser(review.getUser());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
+
+        dto.setUserId(review.getUser().getId());
+        dto.setUserName(review.getUser().getName()); // TODO - Check if the naming is correct
+
+        dto.setPlaceId(review.getPlace().getId());
+        dto.setPlaceName(review.getPlace().getName()); // TODO - Check if the naming is correct
+        return dto;
     }
 }
 
