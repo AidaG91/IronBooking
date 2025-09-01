@@ -1,6 +1,7 @@
 package com.ironhack.IronBooking.service.interfaces;
 import com.ironhack.IronBooking.enums.UserType;
 import com.ironhack.IronBooking.dto.user.*;
+import com.ironhack.IronBooking.dto.booking.*;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface UserService {
 
     // Retrieves a list of users by their UserType and returns a list of response DTOs.
     List<UserResponseDTO> getUsersByType(UserType userType);
+
+    // Retrieves all bookings for a given user ID and returns a list of booking response DTOs.
+    List<BookingResponseDTO> getBookingsByUserId(Long userId);
 }

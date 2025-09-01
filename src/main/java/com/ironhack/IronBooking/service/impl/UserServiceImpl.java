@@ -1,8 +1,9 @@
 package com.ironhack.IronBooking.service.impl;
-
 import com.ironhack.IronBooking.dto.user.*;
+import com.ironhack.IronBooking.dto.booking.*;
 import com.ironhack.IronBooking.enums.UserType;
 import com.ironhack.IronBooking.model.User;
+
 import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,5 +117,17 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setUserType(user.getUserType());
         return dto;
+    }
+
+    // Get bookings for a user and return them as BookingResponseDTOs using the BookingResponseDTO constructor
+    @Override
+    public List<BookingResponseDTO> getBookingsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        return user.getBookings()
+                .stream()
+                .map(BookingResponseDTO::new) // Uses the BookingResponseDTO constructor that will be implemented by your teammate
+                .collect(Collectors.toList());
     }
 }

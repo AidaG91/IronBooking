@@ -1,10 +1,12 @@
 package com.ironhack.IronBooking.controller;
 import com.ironhack.IronBooking.dto.user.*;
+import com.ironhack.IronBooking.dto.booking.*;
 import com.ironhack.IronBooking.enums.UserType;
 
 import com.ironhack.IronBooking.service.interfaces.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,8 @@ import java.util.List;
 @Validated
 public class UserController {
 
-    private final UserService userService;
-
-    // Constructor injection for the service dependency
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     // Get all users as a list of response DTOs
     @GetMapping
@@ -68,5 +66,11 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> getUsersByType(@PathVariable UserType userType) {
         // Finds all users with the specified type and maps them to response DTOs
         return ResponseEntity.ok(userService.getUsersByType(userType));
+    }
+
+    // Get all bookings for a specific user (user id must be positive)
+    @GetMapping("/{id}/bookings")
+    public ResponseEntity<List<BookingResponseDTO>> getBookingsByUserId(@PathVariable @Positive Long id) {
+        return ResponseEntity.ok(userService.getBookingsByUserId(id));
     }
 }
