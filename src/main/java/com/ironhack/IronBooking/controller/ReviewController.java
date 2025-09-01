@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,15 +31,21 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable @Positive Long id) {
         return ResponseEntity.ok(reviewService.getReviewById(id));
     }
+
+
     @PostMapping
-    public ResponseEntity<ReviewResponseDTO> createReview(@Valid @RequestBody ReviewRequestDTO reviewRequest){
-        return ResponseEntity.ok(reviewService.createReview(reviewRequest));
+    public ResponseEntity<ReviewResponseDTO> createReview(@Valid @RequestBody ReviewRequestDTO body) {
+        ReviewResponseDTO created = reviewService.createReview(body);
+        URI location = URI.create("/reviews/" + created.getId());
+        return ResponseEntity.created(location).body(created); // 201 + Location
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<ReviewResponseDTO> updateReview(@PathVariable @Positive Long id,
-                                                          @Valid @RequestBody ReviewUpdateDTO reviewUpdate){
-        return ResponseEntity.ok(reviewService.updateReview(id,reviewUpdate));
+                                                          @Valid @RequestBody ReviewUpdateDTO reviewUpdate) {
+        return ResponseEntity.ok(reviewService.updateReview(id, reviewUpdate));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable @Positive Long id) {
         reviewService.deleteReview(id);

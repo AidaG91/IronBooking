@@ -3,6 +3,7 @@ package com.ironhack.IronBooking.dto.review;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 
@@ -11,9 +12,10 @@ public class ReviewRequestDTO {
 
     @Min(1)
     @Max(5)
-    @NotNull
+    @NotNull(message = "Please add your rating.")
     private Integer rating;
 
+    @Size(max = 500, message = "Your message cannot have more than 500 characters.")
     private String comment;
 
     // Usually we only pass the IDs from other objects

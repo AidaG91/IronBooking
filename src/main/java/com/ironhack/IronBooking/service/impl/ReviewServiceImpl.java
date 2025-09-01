@@ -100,7 +100,8 @@ public class ReviewServiceImpl implements ReviewService {
         dto.setComment(review.getComment());
 
         dto.setUserId(review.getUser().getId());
-        dto.setUserName(review.getUser().getName()); // TODO - Check if the naming is correct
+        dto.setUserFirstName(review.getUser().getFirstName()); //
+        dto.setUserLastName(review.getUser().getLastName());
 
         dto.setPlaceId(review.getPlace().getId());
         dto.setPlaceName(review.getPlace().getName()); // TODO - Check if the naming is correct
