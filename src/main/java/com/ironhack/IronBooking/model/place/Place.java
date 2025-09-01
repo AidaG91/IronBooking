@@ -6,10 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
-@Table(name = "places", indexes = {
-        @Index(name = "idx_places_type", columnList = "placeType"),
-        @Index(name = "idx_places_capacity", columnList = "capacity")
-})
+@Table(name = "places")
 @PrimaryKeyJoinColumn(name = "id")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Place extends PlaceBase {
