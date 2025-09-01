@@ -1,0 +1,94 @@
+package com.ironhack.IronBooking.service.impl;
+
+import com.ironhack.IronBooking.dto.place.*;
+import com.ironhack.IronBooking.enums.PlaceType;
+import com.ironhack.IronBooking.model.place.Place;
+import com.ironhack.IronBooking.repository.PlaceRepository;
+import com.ironhack.IronBooking.service.interfaces.PlaceService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class PlaceServiceImpl implements PlaceService {
+
+    private final PlaceRepository repo;
+
+    @Override @Transactional
+    public PlaceResponseDTO create(@Valid PlaceRequestDTO req) {
+        Place p = Place.builder()
+                .placeType(req.getPlaceType())
+                .capacity(req.getCapacity())
+                .build();
+        p.setName(req.getName());
+        p.setAddress(req.getAddress());
+        p.setPrice(req.getPrice());
+        return toDto(repo.save(p));
+    }
+
+    @Override @Transactional(readOnly = true)
+    public PlaceResponseDTO get(Long id) {
+        return repo.findById(id).map(this::toDto)
+                .orElseThrow(() -> new RuntimeException("Place not found: " + id));
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Page<PlaceResponseDTO> list(Pageable pageable) {
+        return repo.findAll(pageable).map(this::toDto);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Page<PlaceResponseDTO> listByType(PlaceType type, Pageable pageable) {
+        return repo.findByPlaceType(type, pageable).map(this::toDto);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Page<PlaceResponseDTO> listByCity(String city, Pageable pageable) {
+        return repo.findByAddress_CityIgnoreCase(city, pageable).map(this::toDto);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Page<PlaceResponseDTO> listByCountry(String country, Pageable pageable) {
+        return repo.findByAddress_CountryIgnoreCase(country, pageable).map(this::toDto);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Page<PlaceResponseDTO> listByMinCapacity(int capacity, Pageable pageable) {
+        return repo.findByCapacityGreaterThanEqual(capacity, pageable).map(this::toDto);
+    }
+
+    @Override @Transactional
+    public PlaceResponseDTO update(Long id, @Valid PlaceUpdateDTO req) {
+        Place p = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Place not found: " + id));
+
+        if (req.getName() != null) p.setName(req.getName());
+        if (req.getAddress() != null) p.setAddress(req.getAddress());
+        if (req.getPrice() != null) p.setPrice(req.getPrice());
+        if (req.getPlaceType() != null) p.setPlaceType(req.getPlaceType());
+        if (req.getCapacity() != null) p.setCapacity(req.getCapacity());
+
+        return toDto(repo.save(p));
+    }
+
+    @Override @Transactional
+    public void delete(Long id) {
+        if (!repo.existsById(id)) throw new RuntimeException("Place not found: " + id);
+        repo.deleteById(id);
+    }
+
+    private PlaceResponseDTO toDto(Place p) {
+        return PlaceResponseDTO.builder()
+                .id(p.getId())
+                .name(p.getName())
+                .address(p.getAddress())
+                .price(p.getPrice())
+                .placeType(p.getPlaceType())
+                .capacity(p.getCapacity())
+                .build();
+    }
+}
