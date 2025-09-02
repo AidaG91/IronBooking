@@ -13,4 +13,5 @@ public class PlaceResponseDTO {
     private Price price;
     private PlaceType placeType;
     private Integer capacity;
+    private Long ownerId;
 }
