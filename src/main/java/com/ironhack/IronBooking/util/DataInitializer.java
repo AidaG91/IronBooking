@@ -17,7 +17,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     // private final BookingRepository bookingRepository;
     // private final PlaceRepository placeRepository;
-    // private final ReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public void run(String... args) {
@@ -65,11 +65,27 @@ public class DataInitializer implements CommandLineRunner {
             //     // bookingRepository.saveAll(List.of(booking1, ...));
             //     System.out.println("+++++++++++++++ Sample bookings inserted correctly into the database.");
 
-            // 4 - Create Reviews
+            // -----------------------------
+            // 1 - Create Reviews
+            // -----------------------------
             //     // TODO: Implement sample reviews, relate with users (author), bookings/places
-            //     // Review review1 = Review.builder()...build();
-            //     // reviewRepository.saveAll(List.of(review1, ...));
-            //     System.out.println("+++++++++++++++ Sample reviews inserted correctly into the database.");
+            Review review1 = Review.builder()
+                    .user(user1)
+                    .rating(5)
+                    .comment("Amazing experience! The place was clean and the host was very welcoming.")
+                    .place(place1)
+                    .build();
+
+            Review review2 = Review.builder()
+                    .user(user3)
+                    .rating(4)
+                    .comment("Great location and comfortable stay. Would definitely come back!")
+                    .place(place2)
+                    .build();
+
+            reviewRepository.saveAll(List.of(review1, review2));
+
+            System.out.println("+++++++++++++++ Sample reviews inserted correctly into the database.");
         }
     }
 }
