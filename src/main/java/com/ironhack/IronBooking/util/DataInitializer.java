@@ -83,7 +83,28 @@ public class DataInitializer implements CommandLineRunner {
                     .place(place2)
                     .build();
 
-            reviewRepository.saveAll(List.of(review1, review2));
+            Review review3 = Review.builder()
+                    .user(user1)
+                    .rating(3)
+                    .comment("The place was okay, but could use some improvements in cleanliness.")
+                    .place(place3)
+                    .build();
+
+            Review review4 = Review.builder()
+                    .user(user3)
+                    .rating(5)
+                    .comment("Fantastic stay! The amenities were top-notch and the host was very responsive.")
+                    .place(place1)
+                    .build();
+
+            Review review5 = Review.builder()
+                    .user(user1)
+                    .rating(4)
+                    .comment("Very comfortable and well-located. Would recommend to others.")
+                    .place(place2)
+                    .build();
+
+            reviewRepository.saveAll(List.of(review1, review2, review3, review4, review5));
 
             System.out.println("+++++++++++++++ Sample reviews inserted correctly into the database.");
         }
