@@ -11,4 +11,5 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     List<Place> findByCapacityGreaterThanEqual(Integer capacity);
     List<Place> findByAddress_CityIgnoreCase(String city);
     List<Place> findByAddress_CountryIgnoreCase(String country);
+    List<Place> findByOwner_Id(Long ownerId);
 }

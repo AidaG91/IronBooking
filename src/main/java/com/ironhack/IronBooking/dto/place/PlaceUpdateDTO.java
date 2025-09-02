@@ -23,4 +23,7 @@ public class PlaceUpdateDTO {
 
     @Positive(message = "Capacity must be greater than 0.")
     private Integer capacity;
+
+    @Positive(message="Owner id must be positive.")
+    private Long ownerId;
 }

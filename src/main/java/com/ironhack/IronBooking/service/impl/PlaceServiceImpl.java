@@ -2,8 +2,11 @@ package com.ironhack.IronBooking.service.impl;
 
 import com.ironhack.IronBooking.dto.place.*;
 import com.ironhack.IronBooking.enums.PlaceType;
+import com.ironhack.IronBooking.enums.UserType;
+import com.ironhack.IronBooking.model.User;
 import com.ironhack.IronBooking.model.place.Place;
 import com.ironhack.IronBooking.repository.PlaceRepository;
+import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +20,17 @@ import java.util.List;
 public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository repo;
+    private final UserRepository userRepository; // NEW: needed to resolve owner
 
     @Override @Transactional
     public PlaceResponseDTO create(@Valid PlaceRequestDTO req) {
+        // resolve and validate owner
+        User owner = userRepository.findById(req.getOwnerId())
+                .orElseThrow(() -> new RuntimeException("Owner not found: " + req.getOwnerId()));
+        if (owner.getUserType() != UserType.OWNER) {
+            throw new RuntimeException("User " + req.getOwnerId() + " is not an OWNER");
+        }
+
         Place p = Place.builder()
                 .placeType(req.getPlaceType())
                 .capacity(req.getCapacity())
@@ -27,6 +38,8 @@ public class PlaceServiceImpl implements PlaceService {
         p.setName(req.getName());
         p.setAddress(req.getAddress());
         p.setPrice(req.getPrice());
+        p.setOwner(owner); // NEW
+
         return toDto(repo.save(p));
     }
 
@@ -61,6 +74,12 @@ public class PlaceServiceImpl implements PlaceService {
         return repo.findByCapacityGreaterThanEqual(capacity).stream().map(this::toDto).toList();
     }
 
+    // NEW: list by owner
+    @Override @Transactional(readOnly = true)
+    public List<PlaceResponseDTO> listByOwner(Long ownerId) {
+        return repo.findByOwner_Id(ownerId).stream().map(this::toDto).toList();
+    }
+
     @Override @Transactional
     public PlaceResponseDTO update(Long id, @Valid PlaceUpdateDTO req) {
         Place p = repo.findById(id)
@@ -71,6 +90,16 @@ public class PlaceServiceImpl implements PlaceService {
         if (req.getPrice() != null) p.setPrice(req.getPrice());
         if (req.getPlaceType() != null) p.setPlaceType(req.getPlaceType());
         if (req.getCapacity() != null) p.setCapacity(req.getCapacity());
+
+        // NEW: reassign owner if provided
+        if (req.getOwnerId() != null) {
+            User newOwner = userRepository.findById(req.getOwnerId())
+                    .orElseThrow(() -> new RuntimeException("Owner not found: " + req.getOwnerId()));
+            if (newOwner.getUserType() != UserType.OWNER) {
+                throw new RuntimeException("User " + req.getOwnerId() + " is not an OWNER");
+            }
+            p.setOwner(newOwner);
+        }
 
         return toDto(repo.save(p));
     }
@@ -89,6 +118,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .price(p.getPrice())
                 .placeType(p.getPlaceType())
                 .capacity(p.getCapacity())
+                .ownerId(p.getOwner() != null ? p.getOwner().getId() : null) // NEW
                 .build();
     }
 }
