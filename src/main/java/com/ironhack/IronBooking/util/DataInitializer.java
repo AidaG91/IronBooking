@@ -28,7 +28,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // ---------------------------------------
-        // 1) Users: 5 CLIENT + 5 OWNER (если пусто)
+        // 1) Users: 5 CLIENT + 5 OWNER
         // ---------------------------------------
         if (userRepository.count() == 0) {
             // CLIENTS
