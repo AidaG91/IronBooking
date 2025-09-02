@@ -13,6 +13,7 @@ public interface PlaceService {
     List<PlaceResponseDTO> listByCity(String city);
     List<PlaceResponseDTO> listByCountry(String country);
     List<PlaceResponseDTO> listByMinCapacity(int capacity);
+    List<PlaceResponseDTO> listByOwner(Long ownerId);
     PlaceResponseDTO update(Long id, PlaceUpdateDTO req);
     void delete(Long id);
 }

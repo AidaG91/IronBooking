@@ -28,4 +28,8 @@ public class PlaceRequestDTO {
     @NotNull(message = "Capacity is required.")
     @Positive(message = "Capacity must be greater than 0.")
     private Integer capacity;
+
+    @NotNull(message="Owner id is required.")
+    @Positive(message="Owner id must be positive.")
+    private Long ownerId;
 }

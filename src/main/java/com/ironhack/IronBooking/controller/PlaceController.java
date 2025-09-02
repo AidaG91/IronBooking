@@ -48,6 +48,11 @@ public class PlaceController {
         return service.listByMinCapacity(min);
     }
 
+    @GetMapping("/owner/{ownerId}")
+    public List<PlaceResponseDTO> byOwner(@PathVariable Long ownerId) {
+        return service.listByOwner(ownerId);
+    }
+
     @PostMapping
     public ResponseEntity<PlaceResponseDTO> create(@Valid @RequestBody PlaceRequestDTO req) {
         PlaceResponseDTO created = service.create(req);
