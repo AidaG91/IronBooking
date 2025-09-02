@@ -20,11 +20,11 @@ public class BookingUpdateDTO {
     private Long id;
 
     @NotNull(message = "startDate is required")
-    @FutureOrPresent(message = "startDate most be today or in the future")
+    @FutureOrPresent(message = "startDate must be today or in the future")
     private LocalDate startDate;
 
     @NotNull(message = "endDate is required")
-    @FutureOrPresent(message = "endDate most be today or in the future")
+    @FutureOrPresent(message = "endDate must be today or in the future")
     private LocalDate endDate;
 
     @NotNull(message = "Status is required")
