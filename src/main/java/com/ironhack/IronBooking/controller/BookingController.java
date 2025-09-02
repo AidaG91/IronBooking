@@ -41,6 +41,7 @@ public class BookingController {
     }
 
     //Get bookings by status
+    @GetMapping("/status")
     public List<BookingResponseDTO> getBookingByStatus(@PathVariable BookingStatus status) {
         return bookingService.getBookingByStatus(status);
     }
