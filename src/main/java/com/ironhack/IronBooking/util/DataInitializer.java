@@ -59,7 +59,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("+++++++++++++++ Sample users inserted: 5 CLIENT, 5 OWNER.");
         }
 
-        // Берём ровно 5 владельцев (если вдруг меньше — создадим недостающих)
+        // Create list of owners
         List<User> owners = userRepository.findByUserType(UserType.OWNER);
         while (owners.size() < 5) {
             int idx = owners.size() + 1;
@@ -72,11 +72,11 @@ public class DataInitializer implements CommandLineRunner {
         User o1 = owners.get(0), o2 = owners.get(1), o3 = owners.get(2), o4 = owners.get(3), o5 = owners.get(4);
 
         // ---------------------------------------
-        // 2) Places: 5 Barcelona, 5 Malaga, 5 Madrid (если пусто)
+        // 2) Places: 5 Barcelona, 5 Malaga, 5 Madrid
         // ---------------------------------------
         if (placeRepository.count() == 0) {
             List<Place> places = List.of(
-                    // Barcelona (owners rotate)
+                    // Barcelona
                     newPlace("Barcelona Loft 1",    "Barcelona", "Spain", 120.00, PlaceType.APARTMENT,    3, o1),
                     newPlace("Barcelona Studio 2",  "Barcelona", "Spain",  90.00, PlaceType.STUDIO,       2, o2),
                     newPlace("Barcelona Office 3",  "Barcelona", "Spain", 150.00, PlaceType.OFFICE,       6, o3),

@@ -20,7 +20,7 @@ import java.util.List;
 public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository repo;
-    private final UserRepository userRepository; // NEW: needed to resolve owner
+    private final UserRepository userRepository;
 
     @Override @Transactional
     public PlaceResponseDTO create(@Valid PlaceRequestDTO req) {
@@ -38,7 +38,7 @@ public class PlaceServiceImpl implements PlaceService {
         p.setName(req.getName());
         p.setAddress(req.getAddress());
         p.setPrice(req.getPrice());
-        p.setOwner(owner); // NEW
+        p.setOwner(owner);
 
         return toDto(repo.save(p));
     }
@@ -74,7 +74,7 @@ public class PlaceServiceImpl implements PlaceService {
         return repo.findByCapacityGreaterThanEqual(capacity).stream().map(this::toDto).toList();
     }
 
-    // NEW: list by owner
+    // list by owner
     @Override @Transactional(readOnly = true)
     public List<PlaceResponseDTO> listByOwner(Long ownerId) {
         return repo.findByOwner_Id(ownerId).stream().map(this::toDto).toList();
@@ -91,7 +91,7 @@ public class PlaceServiceImpl implements PlaceService {
         if (req.getPlaceType() != null) p.setPlaceType(req.getPlaceType());
         if (req.getCapacity() != null) p.setCapacity(req.getCapacity());
 
-        // NEW: reassign owner if provided
+        // reassign owner if provided
         if (req.getOwnerId() != null) {
             User newOwner = userRepository.findById(req.getOwnerId())
                     .orElseThrow(() -> new RuntimeException("Owner not found: " + req.getOwnerId()));
@@ -118,7 +118,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .price(p.getPrice())
                 .placeType(p.getPlaceType())
                 .capacity(p.getCapacity())
-                .ownerId(p.getOwner() != null ? p.getOwner().getId() : null) // NEW
+                .ownerId(p.getOwner() != null ? p.getOwner().getId() : null)
                 .build();
     }
 }
