@@ -44,7 +44,6 @@ public class User {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 10, message = "User type cannot exceed 10 characters.")
     @Column(nullable = false, length = 10)
     private UserType userType;
 
