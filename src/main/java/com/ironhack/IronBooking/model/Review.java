@@ -1,5 +1,6 @@
 package com.ironhack.IronBooking.model;
 
+import com.ironhack.IronBooking.model.place.Place;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

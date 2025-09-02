@@ -2,10 +2,13 @@ package com.ironhack.IronBooking.service.impl;
 import com.ironhack.IronBooking.dto.user.*;
 import com.ironhack.IronBooking.dto.booking.*;
 import com.ironhack.IronBooking.enums.UserType;
+import com.ironhack.IronBooking.model.Booking;
 import com.ironhack.IronBooking.model.User;
 
 import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.UserService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +17,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
+
 
     // Find user by ID and return as response DTO, or throw exception if not found
     @Override
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userRequestDTO.getFirstName());
         user.setLastName(userRequestDTO.getLastName());
         user.setEmail(userRequestDTO.getEmail());
-        user.setPasswordHash(userRequestDTO.getPassword()); // TODO: When Spring Security is implemented, encode/hash the password bf saving!
+        user.setPasswordHash(userRequestDTO.getPassword());
         user.setUserType(userRequestDTO.getUserType());
 
         // Save user in the database
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
         if (userUpdateDTO.getEmail() != null)
             user.setEmail(userUpdateDTO.getEmail());
         if (userUpdateDTO.getPassword() != null)
-            user.setPasswordHash(userUpdateDTO.getPassword()); // TODO: When Spring Security is implemented, encode/hash the password bf saving!
+            user.setPasswordHash(userUpdateDTO.getPassword());
         if (userUpdateDTO.getUserType() != null)
             user.setUserType(userUpdateDTO.getUserType());
 
@@ -127,7 +129,19 @@ public class UserServiceImpl implements UserService {
 
         return user.getBookings()
                 .stream()
-                .map(BookingResponseDTO::new) // Uses the BookingResponseDTO constructor that will be implemented by your teammate
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    private BookingResponseDTO toResponseDTO(Booking booking) {
+        return new BookingResponseDTO(
+                booking.getId(),
+                booking.getStartDate(),
+                booking.getEndDate(),
+                booking.getNumberOfGuests(),
+                booking.getStatus(),
+                booking.getPlace() != null ? booking.getPlace().getId() : null,
+                booking.getUser() != null ? booking.getUser().getId() : null
+        );
     }
 }

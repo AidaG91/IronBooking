@@ -12,7 +12,8 @@ public class ReviewResponseDTO {
     private String comment;
 
     private Long userId;
-    private String userName;
+    private String userFirstName;
+    private String userLastName;
 
     private Long placeId;
     private String placeName;

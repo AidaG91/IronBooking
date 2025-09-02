@@ -1,6 +1,7 @@
 package com.ironhack.IronBooking.model;
 
 import com.ironhack.IronBooking.enums.BookingStatus;
+import com.ironhack.IronBooking.model.place.Place;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

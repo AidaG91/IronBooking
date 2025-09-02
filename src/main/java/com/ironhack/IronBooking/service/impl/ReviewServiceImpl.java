@@ -4,7 +4,11 @@ import com.ironhack.IronBooking.dto.review.ReviewRequestDTO;
 import com.ironhack.IronBooking.dto.review.ReviewResponseDTO;
 import com.ironhack.IronBooking.dto.review.ReviewUpdateDTO;
 import com.ironhack.IronBooking.model.Review;
+import com.ironhack.IronBooking.model.User;
+import com.ironhack.IronBooking.model.place.Place;
+import com.ironhack.IronBooking.repository.PlaceRepository;
 import com.ironhack.IronBooking.repository.ReviewRepository;
+import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
         dto.setUserLastName(review.getUser().getLastName());
 
         dto.setPlaceId(review.getPlace().getId());
-        dto.setPlaceName(review.getPlace().getName()); // TODO - Check if the naming is correct
+        dto.setPlaceName(review.getPlace().getName());
         return dto;
     }
 }

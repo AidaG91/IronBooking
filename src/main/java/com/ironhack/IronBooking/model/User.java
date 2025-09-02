@@ -1,5 +1,4 @@
 package com.ironhack.IronBooking.model;
-import com.ironhack.IronBooking.model.Booking;
 import com.ironhack.IronBooking.enums.UserType;
 
 import jakarta.persistence.*;
@@ -7,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {

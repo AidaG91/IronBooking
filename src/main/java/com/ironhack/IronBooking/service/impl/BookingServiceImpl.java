@@ -5,9 +5,14 @@ import com.ironhack.IronBooking.dto.booking.BookingResponseDTO;
 import com.ironhack.IronBooking.dto.booking.BookingUpdateDTO;
 import com.ironhack.IronBooking.enums.BookingStatus;
 import com.ironhack.IronBooking.model.Booking;
+import com.ironhack.IronBooking.model.User;
+import com.ironhack.IronBooking.model.place.Place;
 import com.ironhack.IronBooking.repository.BookingRepository;
+import com.ironhack.IronBooking.repository.PlaceRepository;
+import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.BookingService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +20,12 @@ import java.util.List;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
-    private final PlaceRepository placeRepository;
-    private final UserRepository userRepository;
-
-    public BookingServiceImpl(BookingRepository bookingRepository,
-                              PlaceRepository placeRepository)
-                              UserRepository userRepository) {
-    this.bookingRepository = bookingRepository;
-    this.placeRepository = placeRepository;
-    this.userRepository = userRepository;
-    }
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private PlaceRepository placeRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO dto) {
