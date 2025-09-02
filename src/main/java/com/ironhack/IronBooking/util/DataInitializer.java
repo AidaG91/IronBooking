@@ -33,27 +33,28 @@ public class DataInitializer implements CommandLineRunner {
         if (userRepository.count() == 0) {
             // CLIENTS
             User c1 = User.builder().firstName("Alice").lastName("Smith")
-                    .email("alice@mail.com").passwordHash("pass1").userType(UserType.CLIENT).build();
+                    .email("alice@mail.com").passwordHash("password01").userType(UserType.CLIENT).build();
             User c2 = User.builder().firstName("Charlie").lastName("Davis")
-                    .email("charlie@mail.com").passwordHash("pass2").userType(UserType.CLIENT).build();
+                    .email("charlie@mail.com").passwordHash("password02").userType(UserType.CLIENT).build();
             User c3 = User.builder().firstName("Emily").lastName("Johnson")
-                    .email("emily@mail.com").passwordHash("pass3").userType(UserType.CLIENT).build();
+                    .email("emily@mail.com").passwordHash("password03").userType(UserType.CLIENT).build();
             User c4 = User.builder().firstName("Frank").lastName("Wilson")
-                    .email("frank@mail.com").passwordHash("pass4").userType(UserType.CLIENT).build();
+                    .email("frank@mail.com").passwordHash("password04").userType(UserType.CLIENT).build();
             User c5 = User.builder().firstName("Grace").lastName("Lee")
-                    .email("grace@mail.com").passwordHash("pass5").userType(UserType.CLIENT).build();
+                    .email("grace@mail.com").passwordHash("password05").userType(UserType.CLIENT).build();
 
             // OWNERS
             User o1 = User.builder().firstName("Bob").lastName("Brown")
-                    .email("bob@mail.com").passwordHash("pass6").userType(UserType.OWNER).build();
+                    .email("bob@mail.com").passwordHash("password06").userType(UserType.OWNER).build();
             User o2 = User.builder().firstName("Diana").lastName("Miller")
-                    .email("diana@mail.com").passwordHash("pass7").userType(UserType.OWNER).build();
+                    .email("diana@mail.com").passwordHash("password07").userType(UserType.OWNER).build();
             User o3 = User.builder().firstName("Ethan").lastName("Clark")
-                    .email("ethan@mail.com").passwordHash("pass8").userType(UserType.OWNER).build();
+                    .email("ethan@mail.com").passwordHash("password08").userType(UserType.OWNER).build();
             User o4 = User.builder().firstName("Fiona").lastName("Adams")
-                    .email("fiona@mail.com").passwordHash("pass9").userType(UserType.OWNER).build();
+                    .email("fiona@mail.com").passwordHash("password09").userType(UserType.OWNER).build();
             User o5 = User.builder().firstName("George").lastName("King")
-                    .email("george@mail.com").passwordHash("pass10").userType(UserType.OWNER).build();
+                    .email("george@mail.com").passwordHash("password10").userType(UserType.OWNER).build();
+
 
             userRepository.saveAll(List.of(c1, c2, c3, c4, c5, o1, o2, o3, o4, o5));
             System.out.println("+++++++++++++++ Sample users inserted: 5 CLIENT, 5 OWNER.");
