@@ -5,23 +5,22 @@ import com.ironhack.IronBooking.enums.PlaceType;
 import com.ironhack.IronBooking.service.interfaces.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/places")
 @RequiredArgsConstructor
-public class PlacesController {
+public class PlaceController {
 
     private final PlaceService service;
 
     @GetMapping
-    public Page<PlaceResponseDTO> list(Pageable pageable) {
-        return service.list(pageable);
+    public List<PlaceResponseDTO> list() {
+        return service.list();
     }
 
     @GetMapping("/{id}")
@@ -30,23 +29,23 @@ public class PlacesController {
     }
 
     @GetMapping("/type/{type}")
-    public Page<PlaceResponseDTO> byType(@PathVariable PlaceType type, Pageable pageable) {
-        return service.listByType(type, pageable);
+    public List<PlaceResponseDTO> byType(@PathVariable PlaceType type) {
+        return service.listByType(type);
     }
 
     @GetMapping("/city/{city}")
-    public Page<PlaceResponseDTO> byCity(@PathVariable String city, Pageable pageable) {
-        return service.listByCity(city, pageable);
+    public List<PlaceResponseDTO> byCity(@PathVariable String city) {
+        return service.listByCity(city);
     }
 
     @GetMapping("/country/{country}")
-    public Page<PlaceResponseDTO> byCountry(@PathVariable String country, Pageable pageable) {
-        return service.listByCountry(country, pageable);
+    public List<PlaceResponseDTO> byCountry(@PathVariable String country) {
+        return service.listByCountry(country);
     }
 
     @GetMapping("/capacity/{min}")
-    public Page<PlaceResponseDTO> byMinCapacity(@PathVariable int min, Pageable pageable) {
-        return service.listByMinCapacity(min, pageable);
+    public List<PlaceResponseDTO> byMinCapacity(@PathVariable int min) {
+        return service.listByMinCapacity(min);
     }
 
     @PostMapping

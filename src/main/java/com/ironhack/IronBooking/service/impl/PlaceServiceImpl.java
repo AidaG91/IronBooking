@@ -7,10 +7,10 @@ import com.ironhack.IronBooking.repository.PlaceRepository;
 import com.ironhack.IronBooking.service.interfaces.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,28 +37,28 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> list(Pageable pageable) {
-        return repo.findAll(pageable).map(this::toDto);
+    public List<PlaceResponseDTO> list() {
+        return repo.findAll().stream().map(this::toDto).toList();
     }
 
     @Override @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> listByType(PlaceType type, Pageable pageable) {
-        return repo.findByPlaceType(type, pageable).map(this::toDto);
+    public List<PlaceResponseDTO> listByType(PlaceType type) {
+        return repo.findByPlaceType(type).stream().map(this::toDto).toList();
     }
 
     @Override @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> listByCity(String city, Pageable pageable) {
-        return repo.findByAddress_CityIgnoreCase(city, pageable).map(this::toDto);
+    public List<PlaceResponseDTO> listByCity(String city) {
+        return repo.findByAddress_CityIgnoreCase(city).stream().map(this::toDto).toList();
     }
 
     @Override @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> listByCountry(String country, Pageable pageable) {
-        return repo.findByAddress_CountryIgnoreCase(country, pageable).map(this::toDto);
+    public List<PlaceResponseDTO> listByCountry(String country) {
+        return repo.findByAddress_CountryIgnoreCase(country).stream().map(this::toDto).toList();
     }
 
     @Override @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> listByMinCapacity(int capacity, Pageable pageable) {
-        return repo.findByCapacityGreaterThanEqual(capacity, pageable).map(this::toDto);
+    public List<PlaceResponseDTO> listByMinCapacity(int capacity) {
+        return repo.findByCapacityGreaterThanEqual(capacity).stream().map(this::toDto).toList();
     }
 
     @Override @Transactional

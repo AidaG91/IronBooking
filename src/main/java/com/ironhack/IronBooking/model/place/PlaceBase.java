@@ -9,7 +9,7 @@ import lombok.*;
 @Entity
 @Table(name = "place_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor
 public abstract class PlaceBase {
 
     @Id

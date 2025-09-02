@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Embeddable
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class Address implements Serializable {
+public class Address {
 
     @NotBlank
     @Size(max = 80)

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Embeddable
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class Price implements Serializable {
+public class Price {
 
     @NotNull
     @PositiveOrZero
