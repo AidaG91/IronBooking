@@ -1,4 +1,4 @@
-package com.ironhack.IronBooking.dto;
+package com.ironhack.IronBooking.dto.booking;
 
 import com.ironhack.IronBooking.enums.BookingStatus;
 import jakarta.validation.constraints.FutureOrPresent;

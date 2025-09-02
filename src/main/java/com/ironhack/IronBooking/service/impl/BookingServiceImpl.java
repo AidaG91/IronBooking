@@ -1,8 +1,8 @@
 package com.ironhack.IronBooking.service.impl;
 
-import com.ironhack.IronBooking.dto.BookingRequestDTO;
-import com.ironhack.IronBooking.dto.BookingResponseDTO;
-import com.ironhack.IronBooking.dto.BookingUpdateDTO;
+import com.ironhack.IronBooking.dto.booking.BookingRequestDTO;
+import com.ironhack.IronBooking.dto.booking.BookingResponseDTO;
+import com.ironhack.IronBooking.dto.booking.BookingUpdateDTO;
 import com.ironhack.IronBooking.enums.BookingStatus;
 import com.ironhack.IronBooking.model.Booking;
 import com.ironhack.IronBooking.repository.BookingRepository;
@@ -11,7 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {

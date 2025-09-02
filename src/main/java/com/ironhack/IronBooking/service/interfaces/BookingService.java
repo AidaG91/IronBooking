@@ -1,8 +1,8 @@
 package com.ironhack.IronBooking.service.interfaces;
 
-import com.ironhack.IronBooking.dto.BookingRequestDTO;
-import com.ironhack.IronBooking.dto.BookingResponseDTO;
-import com.ironhack.IronBooking.dto.BookingUpdateDTO;
+import com.ironhack.IronBooking.dto.booking.BookingRequestDTO;
+import com.ironhack.IronBooking.dto.booking.BookingResponseDTO;
+import com.ironhack.IronBooking.dto.booking.BookingUpdateDTO;
 import com.ironhack.IronBooking.enums.BookingStatus;
 
 import java.util.List;

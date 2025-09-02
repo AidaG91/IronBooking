@@ -1,16 +1,12 @@
 package com.ironhack.IronBooking.controller;
 
-import com.ironhack.IronBooking.dto.BookingRequestDTO;
-import com.ironhack.IronBooking.dto.BookingResponseDTO;
-import com.ironhack.IronBooking.dto.BookingUpdateDTO;
+import com.ironhack.IronBooking.dto.booking.BookingRequestDTO;
+import com.ironhack.IronBooking.dto.booking.BookingResponseDTO;
+import com.ironhack.IronBooking.dto.booking.BookingUpdateDTO;
 import com.ironhack.IronBooking.enums.BookingStatus;
-import com.ironhack.IronBooking.model.Booking;
 import com.ironhack.IronBooking.service.interfaces.BookingService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
