@@ -56,7 +56,7 @@ mvn spring-boot:run
 - Hibernate
 
 **Database & Persistence**
-- PostgreSQL
+- MySQL
 - Jakarta Validation
 - Lombok
 
@@ -95,7 +95,7 @@ mvn spring-boot:run
 ## 🔗 Extra Links
 
 - [GitHub Projects - Kanban](https://github.com/users/AidaG91/projects/2)
-- [Presentation Slides](TBA)
+- [Presentation Slides](https://gamma.app/docs/IronBooking-0g4h40i8jo3wh2z?mode=doc)
 
 ---
 
