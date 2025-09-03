@@ -112,7 +112,7 @@ mvn spring-boot:run
 - Enable email notifications (for advanced features)
 ---
 ## 👥 Team Members
-
+This project was developed collaboratively by a team of Ironhack students. Each member contributed across different areas including backend logic, testing, and documentation.
 - [Kiko](https://github.com/krub-dev)
 - [Ilia](https://github.com/iyasyr)
 - [Luis](https://github.com/iamluismoran)
