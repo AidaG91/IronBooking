@@ -1,9 +1,10 @@
 package com.ironhack.IronBooking.controller;
+
 import com.ironhack.IronBooking.dto.user.*;
 import com.ironhack.IronBooking.dto.booking.*;
 import com.ironhack.IronBooking.enums.UserType;
-
 import com.ironhack.IronBooking.service.interfaces.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,54 +23,59 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Get all users as a list of response DTOs
     @GetMapping
+    @Operation(summary = "Get all users", description = "Retrieve a list of all users in the system.")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // Get a user by id (id must be positive)
     @GetMapping("/{id}")
+    @Operation(summary = "Get user by ID",
+            description = "Retrieve the details of a user by their unique ID. The ID must be positive.")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable @Positive Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    // Create a new user, and return 201 Created with the Location header
     @PostMapping
+    @Operation(summary = "Create a new user",
+            description = "Create a new user (owner or client) and return the created user with a Location header.")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO body) {
         UserResponseDTO created = userService.createUser(body);
         URI location = URI.create("/users/" + created.getId());
         return ResponseEntity.created(location).body(created);
     }
 
-    // Update user by id (id must be positive)
     @PutMapping("/{id}")
+    @Operation(summary = "Update user by ID", description = "Update an existing user's information by their positive ID.")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable @Positive Long id, @Valid @RequestBody UserUpdateDTO body) {
         return ResponseEntity.ok(userService.updateUser(id, body));
     }
 
-    // Delete user by id (id must be positive)
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete user by ID",
+            description = "Delete a user by their unique positive ID.")
     public ResponseEntity<Void> deleteUser(@PathVariable @Positive Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Get user by email
     @GetMapping("/email/{email}")
+    @Operation(summary = "Get user by email",
+            description = "Retrieve a user's details by their email address.")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
-    // Get users by type (OWNER or CLIENT)
     @GetMapping("/type/{userType}")
+    @Operation(summary = "Get users by type",
+            description = "Retrieve a list of users filtered by their type (OWNER or CLIENT).")
     public ResponseEntity<List<UserResponseDTO>> getUsersByType(@PathVariable UserType userType) {
-        // Finds all users with the specified type and maps them to response DTOs
         return ResponseEntity.ok(userService.getUsersByType(userType));
     }
 
-    // Get all bookings for a specific user (user id must be positive)
     @GetMapping("/{id}/bookings")
+    @Operation(summary = "Get bookings by user ID",
+            description = "Retrieve all bookings associated with a specific user by their positive ID.")
     public ResponseEntity<List<BookingResponseDTO>> getBookingsByUserId(@PathVariable @Positive Long id) {
         return ResponseEntity.ok(userService.getBookingsByUserId(id));
     }

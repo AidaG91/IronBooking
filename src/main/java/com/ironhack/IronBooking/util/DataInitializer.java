@@ -140,7 +140,7 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
         bookingRepository.saveAll(List.of(b1, b2, b3, b4, b5));
-        System.out.println("Sample bookings inserted correctly into the database");
+        System.out.println("+++++++++++++++ Sample bookings inserted correctly into the database");
 
             // -----------------------------
             // 4 - Reviews: 5 Reviews for first 5 places
