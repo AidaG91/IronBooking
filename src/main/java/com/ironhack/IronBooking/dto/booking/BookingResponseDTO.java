@@ -1,6 +1,7 @@
 package com.ironhack.IronBooking.dto.booking;
 
 import com.ironhack.IronBooking.enums.BookingStatus;
+import com.ironhack.IronBooking.model.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,5 @@ public class BookingResponseDTO {
     private BookingStatus status;
     private Long placeId;
     private Long userId;
+
 }

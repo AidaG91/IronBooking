@@ -5,9 +5,14 @@ import com.ironhack.IronBooking.dto.booking.BookingResponseDTO;
 import com.ironhack.IronBooking.dto.booking.BookingUpdateDTO;
 import com.ironhack.IronBooking.enums.BookingStatus;
 import com.ironhack.IronBooking.model.Booking;
+import com.ironhack.IronBooking.model.User;
+import com.ironhack.IronBooking.model.place.Place;
 import com.ironhack.IronBooking.repository.BookingRepository;
+import com.ironhack.IronBooking.repository.PlaceRepository;
+import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.BookingService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,49 +20,44 @@ import java.util.List;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
-    private final PlaceRepository placeRepository;
-    private final UserRepository userRepository;
-
-    public BookingServiceImpl(BookingRepository bookingRepository,
-                              PlaceRepository placeRepository)
-                              UserRepository userRepository) {
-    this.bookingRepository = bookingRepository;
-    this.placeRepository = placeRepository;
-    this.userRepository = userRepository;
-    }
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private PlaceRepository placeRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO dto) {
-    if (dto.getEndDate().isBefore(dto.getStartDate())) {
-        throw new IllegalArgumentException("endDate must be on or after startDate");
-    }
+        if (dto.getEndDate().isBefore(dto.getStartDate())) {
+            throw new IllegalArgumentException("endDate must be on or after startDate");
+        }
 
-    Place place = placeRepository.findById(dto.getPlaceId())
-            .orElseThrow(() -> new EntityNotFoundException("Place not found with id: " + dto.getPlaceId()));
+        Place place = placeRepository.findById(dto.getPlaceId())
+                .orElseThrow(() -> new EntityNotFoundException("Place not found with id: " + dto.getPlaceId()));
 
-    User user = userRepository.findById(dto.getUserId())
-            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dto.getUserId()));
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dto.getUserId()));
 
-    Booking booking = Booking.builder()
-            .startDate(dto.getStartDate())
-            .endDate(dto.getEndDate())
-            .numberOfGuests(dto.getNumberOfGuests())
-            .status(BookingStatus.CONFIRMED)
-            .place(place)
-            .user(user)
-            .build();
+        Booking booking = Booking.builder()
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .numberOfGuests(dto.getNumberOfGuests())
+                .status(BookingStatus.CONFIRMED)
+                .place(place)
+                .user(user)
+                .build();
 
-    Booking saved = bookingRepository.save(booking);
-    return toResponseDTO(saved);
+        Booking saved = bookingRepository.save(booking);
+        return toResponseDTO(saved);
     }
 
     // Read one
     @Override
     public  BookingResponseDTO getBookingById(Long id) {
-      Booking booking = bookingRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found with id:" + id));
-      return toResponseDTO(booking);
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found with id:" + id));
+        return toResponseDTO(booking);
     }
 
     // Read all
@@ -99,15 +99,15 @@ public class BookingServiceImpl implements BookingService {
     // Delete
     @Override
     public void deleteBooking(Long id) {
-    bookingRepository.deleteById(id);
+        bookingRepository.deleteById(id);
     }
 
     // Read by status
     public List<BookingResponseDTO> getBookingByStatus(BookingStatus status) {
-       return bookingRepository.findByStatus(status)
-               .stream()
-               .map(this::toResponseDTO)
-               .toList();
+        return bookingRepository.findByStatus(status)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
     private BookingResponseDTO toResponseDTO(Booking booking) {
