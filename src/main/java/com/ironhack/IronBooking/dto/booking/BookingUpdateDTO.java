@@ -1,5 +1,6 @@
 package com.ironhack.IronBooking.dto.booking;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ironhack.IronBooking.enums.BookingStatus;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
@@ -21,10 +22,12 @@ public class BookingUpdateDTO {
 
     @NotNull(message = "startDate is required")
     @FutureOrPresent(message = "startDate must be today or in the future")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startDate;
 
     @NotNull(message = "endDate is required")
     @FutureOrPresent(message = "endDate must be today or in the future")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate endDate;
 
     @NotNull(message = "Status is required")
