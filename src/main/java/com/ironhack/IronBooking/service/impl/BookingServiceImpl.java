@@ -12,9 +12,12 @@ import com.ironhack.IronBooking.repository.PlaceRepository;
 import com.ironhack.IronBooking.repository.UserRepository;
 import com.ironhack.IronBooking.service.interfaces.BookingService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,62 +31,66 @@ public class BookingServiceImpl implements BookingService {
     private UserRepository userRepository;
 
     @Override
-    public BookingResponseDTO createBooking(BookingRequestDTO dto) {
-        if (dto.getEndDate().isBefore(dto.getStartDate())) {
-            throw new IllegalArgumentException("endDate must be on or after startDate");
-        }
+    @Transactional
+    public BookingResponseDTO createBooking(@Valid BookingRequestDTO dto) {
+        validateDates(dto.getStartDate(), dto.getEndDate()); // [start, end)
 
         Place place = placeRepository.findById(dto.getPlaceId())
                 .orElseThrow(() -> new EntityNotFoundException("Place not found with id: " + dto.getPlaceId()));
-
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dto.getUserId()));
+
+        // Availability check (CONFIRMED only)
+        long conflicts = bookingRepository.countOverlaps(place.getId(), dto.getStartDate(), dto.getEndDate());
+        if (conflicts > 0) {
+            throw new IllegalStateException("Place is not available for the selected dates");
+        }
 
         Booking booking = Booking.builder()
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
                 .numberOfGuests(dto.getNumberOfGuests())
-                .status(BookingStatus.CONFIRMED)
+                .status(BookingStatus.CONFIRMED) // keep confirmed for study project
                 .place(place)
                 .user(user)
                 .build();
 
-        Booking saved = bookingRepository.save(booking);
-        return toResponseDTO(saved);
+        return toResponseDTO(bookingRepository.save(booking));
     }
 
-    // Read one
     @Override
-    public  BookingResponseDTO getBookingById(Long id) {
+    @Transactional(readOnly = true)
+    public BookingResponseDTO getBookingById(Long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with id:" + id));
         return toResponseDTO(booking);
     }
 
-    // Read all
     @Override
-    public List<BookingResponseDTO> getAllBookings(){
-        return bookingRepository.findAll()
-                .stream()
-                .map(this::toResponseDTO)
-                .toList();
+    @Transactional(readOnly = true)
+    public List<BookingResponseDTO> getAllBookings() {
+        return bookingRepository.findAll().stream().map(this::toResponseDTO).toList();
     }
 
-    // Update
     @Override
-    public BookingResponseDTO updateBooking(Long id, BookingUpdateDTO dto){
+    @Transactional
+    public BookingResponseDTO updateBooking(Long id, @Valid BookingUpdateDTO dto) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with id: " + id));
 
-        if (dto.getEndDate().isBefore(dto.getStartDate())) {
-            throw new IllegalArgumentException("endDate must be on or after startDate");
-        }
+        validateDates(dto.getStartDate(), dto.getEndDate()); // [start, end)
 
         Place place = placeRepository.findById(dto.getPlaceId())
                 .orElseThrow(() -> new EntityNotFoundException("Place not found with id: " + dto.getPlaceId()));
-
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dto.getUserId()));
+
+        // Availability check ignoring the current booking's id
+        long conflicts = bookingRepository.countOverlapsExcludingId(
+                place.getId(), dto.getStartDate(), dto.getEndDate(), booking.getId());
+        if (conflicts > 0) {
+            throw new IllegalStateException("Place is not available for the selected dates");
+        }
 
         booking.setStartDate(dto.getStartDate());
         booking.setEndDate(dto.getEndDate());
@@ -92,22 +99,30 @@ public class BookingServiceImpl implements BookingService {
         booking.setPlace(place);
         booking.setUser(user);
 
-        Booking updated = bookingRepository.save(booking);
-        return toResponseDTO(updated);
+        return toResponseDTO(bookingRepository.save(booking));
     }
 
-    // Delete
-    @Override
+    @Transactional
     public void deleteBooking(Long id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new EntityNotFoundException("Booking not found with id: " + id);
+        }
         bookingRepository.deleteById(id);
     }
 
-    // Read by status
+
+    @Transactional(readOnly = true)
     public List<BookingResponseDTO> getBookingByStatus(BookingStatus status) {
-        return bookingRepository.findByStatus(status)
-                .stream()
-                .map(this::toResponseDTO)
-                .toList();
+        return bookingRepository.findByStatus(status).stream().map(this::toResponseDTO).toList();
+    }
+
+    private void validateDates(LocalDate start, LocalDate end) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("startDate and endDate are required");
+        }
+        if (!end.isAfter(start)) {
+            throw new IllegalArgumentException("endDate must be after startDate (exclusive end semantics)");
+        }
     }
 
     private BookingResponseDTO toResponseDTO(Booking booking) {
@@ -121,5 +136,4 @@ public class BookingServiceImpl implements BookingService {
                 booking.getUser() != null ? booking.getUser().getId() : null
         );
     }
-
 }
