@@ -20,7 +20,7 @@ public class BookingRequestDTO {
     private LocalDate startDate;
 
     @NotNull(message = "endDate is required")
-    @FutureOrPresent(message = "startDate must be today or in the future")
+    @FutureOrPresent(message = "endDate must be today or in the future")
     private LocalDate endDate;
 
     @Min(value = 1, message = "numberOfGuests must be at least 1")
