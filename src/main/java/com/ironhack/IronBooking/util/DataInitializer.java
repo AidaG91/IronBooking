@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,11 +91,56 @@ public class DataInitializer implements CommandLineRunner {
             placeRepository.saveAll(places);
             System.out.println("+++++++++++++++ Sample places inserted: 5 Barcelona, 5 Malaga, 5 Madrid (rotated across 5 owners).");
 
-            // 3 - Bookings:
-            //     // TODO: Implement sample bookings, relate with users and places
-            //     // Booking booking1 = Booking.builder()...build();
-            //     // bookingRepository.saveAll(List.of(booking1, ...));
-            //     System.out.println("+++++++++++++++ Sample bookings inserted correctly into the database.");
+        // -----------------------------
+        // 3 - Bookings: 5 Bookings
+        // -----------------------------
+       Booking b1 = Booking.builder()
+               .startDate(LocalDate.now().plusDays(1))
+               .endDate(LocalDate.now().plusDays(5))
+               .numberOfGuests(2)
+               .status(BookingStatus.CONFIRMED)
+               .user(c1)
+               .place(places.get(6)) // Malaga Studio 2 (capacity 2)
+               .build();
+
+        Booking b2 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(10))
+                .endDate(LocalDate.now().plusDays(12))
+                .numberOfGuests(4)
+                .status(BookingStatus.CONFIRMED)
+                .user(c2)
+                .place(places.get(10)) // Madrid Apartment 1 (capacity 4)
+                .build();
+
+        Booking b3 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(4))
+                .endDate(LocalDate.now().plusDays(7))
+                .numberOfGuests(5)
+                .status(BookingStatus.CANCELLED)
+                .user(c3)
+                .place(places.get(4)) // Barcelona House 5 (capacity 5)
+                .build();
+
+        Booking b4 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(15))
+                .endDate(LocalDate.now().plusDays(18))
+                .numberOfGuests(9)
+                .status(BookingStatus.COMPLETED)
+                .user(c4)
+                .place(places.get(13)) // Madrid Meeting 4 (capacity 10)
+                .build();
+
+        Booking b5 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(20))
+                .endDate(LocalDate.now().plusDays(25))
+                .numberOfGuests(6)
+                .status(BookingStatus.CONFIRMED)
+                .user(c5)
+                .place(places.get(2)) // Barcelona Office 3 (capacity 6)
+                .build();
+
+        bookingRepository.saveAll(List.of(b1, b2, b3, b4, b5));
+        System.out.println("Sample bookings inserted correctly into the database");
 
             // -----------------------------
             // 4 - Reviews: 5 Reviews for first 5 places
